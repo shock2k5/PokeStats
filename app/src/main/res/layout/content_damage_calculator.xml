@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_damage_calculator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="shock2k5.pokestats.DamageCalculatorActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_dmg_top">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/left_side">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/atk_poke_title"
+                    android:text="@string/left_side_title"
+                    android:textSize="20dp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center" />
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_below="@id/atk_poke_title"
+                    android:src="@mipmap/pokeball"
+                    android:id="@+id/img_left_poke"/>
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name"
+                    android:layout_below="@id/img_left_poke"
+                    android:id="@+id/left_name"
+                    android:paddingTop="10dp" />
+
+                <!--
+                 EV BARS START HERE
+                 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/left_hp_layout"
+                    android:layout_below="@id/left_name"
+                    android:layout_alignParentStart="true"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.07"
+                        android:max="63"
+                        android:id="@+id/left_hp_bar" />
+
+                    <TextView
+                        android:id="@+id/txt_left_hp_ev"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hp"
+                        android:textSize="20dp"
+                        android:gravity="center" />
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/left_hp_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/left_hp_layout"
+                    android:id="@+id/left_atk_layout"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7.99"
+                        android:max="63"
+                        android:id="@+id/left_atk_bar"/>
+
+                    <TextView
+                        android:id="@+id/txt_left_atk_ev"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/atk"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/left_atk_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/left_atk_layout"
+                    android:id="@+id/left_def_layout"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:max="63"
+                        android:id="@+id/left_def_bar" />
+                    <TextView
+                        android:id="@+id/txt_left_def_ev"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/def"
+                        android:textSize="20dp"/>
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/left_def_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/left_def_layout"
+                    android:id="@+id/left_spa_layout"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:max="63"
+                        android:id="@+id/left_spa_bar" />
+                    <TextView
+                        android:id="@+id/txt_left_spa_ev"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/spa"
+                        android:textSize="20dp"/>
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/left_spa_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/left_spa_layout"
+                    android:id="@+id/left_spd_layout"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:max="63"
+                        android:id="@+id/left_spd_bar" />
+                    <TextView
+                        android:id="@+id/txt_left_spd_ev"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/spd"
+                        android:textSize="20dp"/>
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/left_spd_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/left_spd_layout"
+                    android:id="@+id/left_spe_layout">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:max="63"
+                        android:id="@+id/left_spe_bar"
+                        android:paddingTop="10dp" />
+                    <TextView
+                        android:id="@+id/txt_left_spe_ev"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/spe"
+                        android:textSize="20dp"/>
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/left_spe_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/items"
+                    android:layout_below="@id/left_spe_layout"
+                    android:id="@+id/left_spn_items"
+                    android:paddingTop="10dp">
+                </Spinner>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/abilities"
+                    android:layout_below="@id/left_spn_items"
+                    android:id="@+id/left_spn_abilities"
+                    android:paddingTop="5dp">
+                </Spinner>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/natures"
+                    android:layout_below="@id/left_spn_abilities"
+                    android:id="@+id/left_spn_natures"
+                    android:paddingTop="5dp">
+                </Spinner>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moves"
+                    android:layout_below="@id/left_spn_natures"
+                    android:id="@+id/left_txt_moves"
+                    android:textSize="36sp"
+                    android:gravity="center"
+                    android:paddingTop="10dp" />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spn_left_move_1"
+                    android:layout_below="@id/left_txt_moves"
+                    android:paddingTop="15dp"
+                    android:entries="@array/moves_prompt">
+                </Spinner>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spn_left_move_2"
+                    android:paddingTop="15dp"
+                    android:layout_below="@id/spn_left_move_1"
+                    android:entries="@array/moves_prompt">
+                </Spinner>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spn_left_move_3"
+                    android:paddingTop="15dp"
+                    android:layout_below="@id/spn_left_move_2"
+                    android:entries="@array/moves_prompt">
+                </Spinner>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spn_left_move_4"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="10dp"
+                    android:layout_below="@id/spn_left_move_3"
+                    android:entries="@array/moves_prompt">
+                </Spinner>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_toRightOf="@id/img_left_poke"
+                    android:layout_below="@id/atk_poke_title"
+                    android:layout_above="@id/left_name">
+
+                    <ToggleButton
+                        android:text="ToggleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/toggleButton"
+                        android:textOff="BURN"
+                        android:textOn="BURN" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/img_burn"/>
+
+                    <ToggleButton
+                        android:text="ToggleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/toggleButton2"
+                        android:textOff="PRZ"
+                        android:textOn="PRZ" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/img_paralysis"/>
+                </LinearLayout>
+
+
+
+
+
+
+            </RelativeLayout>
+
+            <!--
+                Defending Pokemon layout starts here
+            -->
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/right_side">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/def_poke_title"
+                    android:text="@string/right_side_title"
+                    android:textSize="20dp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center" />
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@mipmap/pokeball"
+                    android:id="@+id/img_right_poke"
+                    android:layout_below="@+id/def_poke_title"
+                    android:layout_alignParentEnd="true" />
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name"
+                    android:id="@+id/right_name"
+                    android:layout_below="@id/img_right_poke"
+                    android:layout_alignParentStart="true"
+                    android:paddingTop="10dp" />
+                <!--
+                    Defending Pokemon's EV stats start here
+                -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/right_hp_layout"
+                    android:layout_below="@id/right_name"
+                    android:layout_alignParentStart="true"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.07"
+                        android:max="63"
+                        android:id="@+id/right_hp_bar" />
+
+                    <TextView
+                        android:id="@+id/txt_right_hp_ev"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hp"
+                        android:textSize="20dp"
+                        android:gravity="center" />
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/right_hp_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/right_hp_layout"
+                    android:id="@+id/right_atk_layout"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7.99"
+                        android:max="63"
+                        android:id="@+id/right_atk_bar"/>
+
+                    <TextView
+                        android:id="@+id/txt_right_atk_ev"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/atk"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/right_atk_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/right_atk_layout"
+                    android:id="@+id/right_def_layout"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:max="63"
+                        android:id="@+id/right_def_bar" />
+                    <TextView
+                        android:id="@+id/txt_right_def_ev"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/def"
+                        android:textSize="20dp"/>
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/right_def_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/right_def_layout"
+                    android:id="@+id/right_spa_layout"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:max="63"
+                        android:id="@+id/right_spa_bar" />
+                    <TextView
+                        android:id="@+id/txt_right_spa_ev"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/spa"
+                        android:textSize="20dp"/>
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/right_spa_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/right_spa_layout"
+                    android:id="@+id/right_spd_layout"
+                    android:paddingTop="10dp">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:max="63"
+                        android:id="@+id/right_spd_bar" />
+                    <TextView
+                        android:id="@+id/txt_right_spd_ev"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/spd"
+                        android:textSize="20dp"/>
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/right_spd_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/right_spd_layout"
+                    android:id="@+id/right_spe_layout">
+                    <SeekBar
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:max="63"
+                        android:id="@+id/right_spe_bar"
+                        android:paddingTop="10dp" />
+                    <TextView
+                        android:id="@+id/txt_right_spe_ev"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/spe"
+                        android:textSize="20dp"/>
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/right_spe_num"
+                        android:text="0"
+                        android:layout_weight="0.15"
+                        android:gravity="right"
+                        android:layout_width="30dp" />
+                </LinearLayout>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/items"
+                    android:id="@+id/right_spn_items"
+                    android:layout_below="@+id/right_spe_layout"
+                    android:layout_alignParentStart="true"
+                    android:paddingTop="10dp">
+                </Spinner>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/abilities"
+                    android:layout_below="@id/right_spn_items"
+                    android:id="@+id/right_spn_abilities"
+                    android:paddingTop="5dp">
+                </Spinner>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/natures"
+                    android:layout_below="@id/right_spn_abilities"
+                    android:id="@+id/right_spn_natures"
+                    android:paddingTop="5dp">
+                </Spinner>
+                <Button
+                    android:text="Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/right_spn_natures"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="95dp"
+                    android:id="@+id/btn_calcuclate" />
+
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_toLeftOf="@id/img_right_poke"
+                    android:layout_below="@id/def_poke_title"
+                    android:layout_above="@id/right_name">
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/img_right_burn"/>
+
+                    <ToggleButton
+                        android:text="ToggleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/toggleButton4"
+                        android:textOff="BURN"
+                        android:textOn="BURN" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/img_right_paralysis"/>
+
+                    <ToggleButton
+                        android:text="ToggleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/toggleButton5"
+                        android:textOff="PRZ"
+                        android:textOn="PRZ" />
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!--
+            Pokemon Stats Start Here
+        -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/atk_poke_stats"
+            android:layout_below="@id/layout_dmg_top">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/def_poke_stats"
+            android:layout_below="@id/atk_poke_stats">
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>

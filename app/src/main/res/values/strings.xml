@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">PokeStats</string>
+    <string name="action_settings">Settings</string>
+    <string name="name">Name</string>
+    <string name="left_side_title">Attacking Pokemon</string>
+    <string name="right_side_title">Defending Pokemon</string>
+    <string name="atk">ATK</string>
+    <string name="def">DEF</string>
+    <string name="spa">SpA</string>
+    <string name="spd">SpD</string>
+    <string name="spe">SPE</string>
+    <string name="hp">HP</string>
+    <string name="moves">Moves</string>
+    <string name="status">Status</string>
+
+    <string-array name="moves_prompt">
+        <item>Please Select a Pokemon first</item>
+    </string-array>
+
+    <string-array name="abilities">
+        <item>Choose Ability</item>
+        <item>Parental Bond</item>
+    </string-array>
+
+    <string-array name="items">
+        <item>Choose Your Item</item>
+        <item>Choice Band</item>
+        <item>Choice Scarf</item>
+        <item>Choice Specs</item>
+    </string-array>
+
+    <string-array name="natures">
+        <item>Choose Your Nature</item>
+        <item>Adamant</item>
+    </string-array>
+
+    <string-array name="moves">
+        <item>Hidden Power Ice</item>
+        <item>Hidden Power Water</item>
+    </string-array>
+</resources>
