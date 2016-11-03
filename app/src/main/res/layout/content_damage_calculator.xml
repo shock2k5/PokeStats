@@ -50,6 +50,41 @@
                  -->
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_toRightOf="@id/img_left_poke"
+                    android:layout_below="@id/atk_poke_title"
+                    android:layout_above="@id/left_name">
+
+                    <ToggleButton
+                        android:text="ToggleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/toggleButton"
+                        android:textOff="BURN"
+                        android:textOn="BURN" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/img_burn"/>
+
+                    <ToggleButton
+                        android:text="ToggleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/toggleButton2"
+                        android:textOff="PRZ"
+                        android:textOn="PRZ" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/img_paralysis"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/left_hp_layout"
                     android:layout_below="@id/left_name"
@@ -234,7 +269,7 @@
                     android:entries="@array/items"
                     android:layout_below="@id/left_spe_layout"
                     android:id="@+id/left_spn_items"
-                    android:paddingTop="10dp">
+                    android:paddingTop="20dp">
                 </Spinner>
                 <Spinner
                     android:layout_width="match_parent"
@@ -242,7 +277,7 @@
                     android:entries="@array/abilities"
                     android:layout_below="@id/left_spn_items"
                     android:id="@+id/left_spn_abilities"
-                    android:paddingTop="5dp">
+                    android:paddingTop="15dp">
                 </Spinner>
                 <Spinner
                     android:layout_width="match_parent"
@@ -250,24 +285,16 @@
                     android:entries="@array/natures"
                     android:layout_below="@id/left_spn_abilities"
                     android:id="@+id/left_spn_natures"
-                    android:paddingTop="5dp">
+                    android:paddingTop="15dp">
                 </Spinner>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/moves"
-                    android:layout_below="@id/left_spn_natures"
-                    android:id="@+id/left_txt_moves"
-                    android:textSize="36sp"
-                    android:gravity="center"
-                    android:paddingTop="10dp" />
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spn_left_move_1"
-                    android:layout_below="@id/left_txt_moves"
                     android:paddingTop="15dp"
-                    android:entries="@array/moves_prompt">
+                    android:entries="@array/moves_prompt"
+                    android:layout_below="@+id/left_spn_natures"
+                    android:layout_alignParentStart="true">
                 </Spinner>
                 <Spinner
                     android:layout_width="match_parent"
@@ -289,52 +316,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spn_left_move_4"
+                    android:layout_below="@id/spn_left_move_3"
                     android:paddingTop="15dp"
                     android:paddingBottom="10dp"
-                    android:layout_below="@id/spn_left_move_3"
-                    android:entries="@array/moves_prompt">
+                    android:entries="@array/moves_prompt"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true">
                 </Spinner>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_toRightOf="@id/img_left_poke"
-                    android:layout_below="@id/atk_poke_title"
-                    android:layout_above="@id/left_name">
-
-                    <ToggleButton
-                        android:text="ToggleButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/toggleButton"
-                        android:textOff="BURN"
-                        android:textOn="BURN" />
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/img_burn"/>
-
-                    <ToggleButton
-                        android:text="ToggleButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/toggleButton2"
-                        android:textOff="PRZ"
-                        android:textOn="PRZ" />
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/img_paralysis"/>
-                </LinearLayout>
-
-
-
-
 
 
             </RelativeLayout>
@@ -559,7 +547,7 @@
                     android:id="@+id/right_spn_items"
                     android:layout_below="@+id/right_spe_layout"
                     android:layout_alignParentStart="true"
-                    android:paddingTop="10dp">
+                    android:paddingTop="20dp">
                 </Spinner>
                 <Spinner
                     android:layout_width="match_parent"
@@ -567,7 +555,7 @@
                     android:entries="@array/abilities"
                     android:layout_below="@id/right_spn_items"
                     android:id="@+id/right_spn_abilities"
-                    android:paddingTop="5dp">
+                    android:paddingTop="15dp">
                 </Spinner>
                 <Spinner
                     android:layout_width="match_parent"
@@ -575,19 +563,8 @@
                     android:entries="@array/natures"
                     android:layout_below="@id/right_spn_abilities"
                     android:id="@+id/right_spn_natures"
-                    android:paddingTop="5dp">
+                    android:paddingTop="15dp">
                 </Spinner>
-                <Button
-                    android:text="Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/right_spn_natures"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="95dp"
-                    android:id="@+id/btn_calcuclate" />
-
-
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -625,6 +602,48 @@
 
 
                 </LinearLayout>
+
+                <TextView
+                    android:text="Move 1 Damage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/right_spn_natures"
+                    android:paddingTop="15dp"
+                    android:id="@+id/txt_move1_dmg"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center"
+                    android:textSize="16sp" />
+                <TextView
+                    android:text="Move 2 Damage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_move1_dmg"
+                    android:paddingTop="15dp"
+                    android:id="@+id/txt_move2_dmg"
+                    android:textSize="15dp"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center" />
+                <TextView
+                    android:text="Move 3 Damage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_move2_dmg"
+                    android:paddingTop="15dp"
+                    android:id="@+id/txt_move3_dmg"
+                    android:textSize="15dp"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center" />
+
+                <TextView
+                    android:text="Move 4 Damage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:id="@+id/txt_move4_dmg"
+                    android:textSize="15dp"
+                    android:layout_below="@+id/txt_move3_dmg"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center" />
 
             </RelativeLayout>
         </LinearLayout>

@@ -19,7 +19,6 @@
 
     <string-array name="abilities">
         <item>Choose Ability</item>
-        <item>Parental Bond</item>
     </string-array>
 
     <string-array name="items">
@@ -31,11 +30,31 @@
 
     <string-array name="natures">
         <item>Choose Your Nature</item>
+        <item>Hardy</item>
+        <item>Lonely</item>
         <item>Adamant</item>
+        <item>Naughty</item>
+        <item>Brave</item>
+        <item>Bold</item>
+        <item>Docile</item>
+        <item>Impish</item>
+        <item>Lax</item>
+        <item>Relaxed</item>
+        <item>Modest</item>
+        <item>Mild</item>
+        <item>Bashful</item>
+        <item>Rash</item>
+        <item>Quiet</item>
+        <item>Calm</item>
+        <item>Gentle</item>
+        <item>Careful</item>
+        <item>Quirky</item>
+        <item>Sassy</item>
+        <item>Timid</item>
+        <item>Hasty</item>
+        <item>Jolly</item>
+        <item>Naive</item>
+        <item>Serious</item>
     </string-array>
 
-    <string-array name="moves">
-        <item>Hidden Power Ice</item>
-        <item>Hidden Power Water</item>
-    </string-array>
 </resources>

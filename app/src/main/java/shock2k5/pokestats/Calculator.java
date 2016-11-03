@@ -38,5 +38,6 @@ public class Calculator extends Thread {
         if(lPoke == null || rPoke == null){
             Toast.makeText(context, "Please Choose 2 Pokemon first", Toast.LENGTH_SHORT).show();
         }
+
     }
 }

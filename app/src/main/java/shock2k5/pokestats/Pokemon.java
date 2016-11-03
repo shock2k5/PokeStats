@@ -13,6 +13,7 @@ import java.util.Map;
 public class Pokemon {
     public int baseATK, baseDEF, baseSPA, baseSPD, baseSPE, baseHP, dexNumber, eggSteps, femalePercentage,
             malePercentage, weight;
+    public double level;
     public String eggGroup1, eggGroup2, height, name, photoURL, type1, type2;
     public ArrayList<String> eggMoves, lvMoves, tmMoves, transferMoves, tutorMoves;
     public static ArrayList<String> names = null;
@@ -28,5 +29,9 @@ public class Pokemon {
         names.addAll(map.keySet());
 
         return names;
+    }
+
+    public Pokemon(){
+        this.level = 50;
     }
 }
