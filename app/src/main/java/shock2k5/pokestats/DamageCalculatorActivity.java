@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -32,18 +31,17 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         spnRightMove1, spnRightMove2, spnRightMove3, spnRightMove4,
         spnLeftAbility, spnLeftItem, spnleftNature, spnRightAbility,
         spnRightNature, spnRightItem;
-    public ArrayList<String> pokeNames, moves, leftAbilities, rightAbilities;
+    public ArrayList<String> pokeNames, moves, leftAbilities, rightAbilities, moves1;
     public String pokeLeft, pokeRight, lTempName, rTempName;
     private Firebase fireRef;
-    private DataSnapshot pokedex;
-    private AutoCompleteTextView leftName, rightName;
+    private AutoCompleteTextView txtLeftName, txtRightName;
     private SeekBar leftHP, leftATK, leftDEF, leftSPA, leftSPD, leftSPE,
         rightHP, rightATK, rightDEF, rightSPA, rightSPD, rightSPE;
     private TextView leftHPEV, leftATKEV, leftDEFEV, leftSPAEV, leftSPDEV, leftSPEEV,
         rightHPEV, rightATKEV, rightDEFEV, rightSPAEV, rightSPDEV, rightSPEEV,
             txtResult1, txtResult2, txtResult3, txtResult4;
     private ImageView imgLeftPoke, imgRightPoke;
-
+    public static DataSnapshot database;
 
     private Pokemon leftPoke, rightPoke;
 
@@ -73,12 +71,12 @@ public class DamageCalculatorActivity extends AppCompatActivity {
              * update the Pokemon list
              */
             public void onDataChange(final DataSnapshot dataSnapshot) {
-                pokedex = dataSnapshot;
-                pokeNames = Pokemon.getNames(pokedex);
+                database = dataSnapshot;
+                pokeNames = Pokemon.getNames(dataSnapshot);
 
-                leftName = (AutoCompleteTextView) findViewById(R.id.left_name);
-                leftName.setAdapter(new ArrayAdapter<String> (getApplicationContext(), android.R.layout.simple_list_item_1, pokeNames));
-                leftName.addTextChangedListener(new TextWatcher() {
+                txtLeftName = (AutoCompleteTextView) findViewById(R.id.left_name);
+                txtLeftName.setAdapter(new ArrayAdapter<String> (getApplicationContext(), android.R.layout.simple_list_item_1, pokeNames));
+                txtLeftName.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -90,7 +88,7 @@ public class DamageCalculatorActivity extends AppCompatActivity {
                         lTempName = charSequence.toString();
 
                         if(pokeNames.contains(lTempName.toLowerCase())){
-                            updateLeft(lTempName, dataSnapshot.child("Pokemon"));
+                            updateLeft(lTempName, dataSnapshot);
                         }
                     }
 
@@ -100,9 +98,9 @@ public class DamageCalculatorActivity extends AppCompatActivity {
                     }
                 });
 
-                rightName = (AutoCompleteTextView) findViewById(R.id.right_name);
-                rightName.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, pokeNames));
-                rightName.addTextChangedListener(new TextWatcher() {
+                txtRightName = (AutoCompleteTextView) findViewById(R.id.right_name);
+                txtRightName.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, pokeNames));
+                txtRightName.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     }
@@ -141,16 +139,10 @@ public class DamageCalculatorActivity extends AppCompatActivity {
      * Pokedex. This will update the stats, abilities, and moves list for the Attacking mon.
      */
     private void updateLeft(String name, DataSnapshot snap) {
-        Map<String, Object> currPoke = (Map<String, Object>) snap.child(name.toLowerCase()).getValue();
+        leftPoke = Pokemon.getPokemon(snap, name);
+        Map<String, Object> currPoke = (Map<String, Object>) snap.child("Pokemon").child(name.toLowerCase()).getValue();
 
         Picasso.with(this).load((String) currPoke.get("photo")).into(imgLeftPoke);
-
-        leftPoke.baseATK = ((Long) currPoke.get("ATK")).intValue();
-        leftPoke.baseDEF = ((Long) currPoke.get("DEF")).intValue();
-        leftPoke.baseHP = ((Long) currPoke.get("HP")).intValue();
-        leftPoke.baseSPA = ((Long) currPoke.get("SPA")).intValue();
-        leftPoke.baseSPD = ((Long) currPoke.get("SPD")).intValue();
-        leftPoke.baseSPE = ((Long) currPoke.get("SPE")).intValue();
 
         moves = new ArrayList<>();
         if(currPoke.get("eggMoves") != null) moves.addAll(((ArrayList<String>) currPoke.get("eggMoves")));
@@ -172,7 +164,7 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         spnLeftMove1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                txtResult1.setText(calculateDamage(moves.get(position), true));
+                txtResult1.setText(calculateLeftDamage(moves.get(position), true));
             }
 
             @Override
@@ -232,12 +224,90 @@ public class DamageCalculatorActivity extends AppCompatActivity {
      * @param leftAttacker
      * @return
      */
-    private String calculateDamage(String attack, boolean leftAttacker) {
-        double fullDamage = (((2 * leftPoke.level / 5 + 2) * getAttack() * getPower(attack) / getDefense()) / 50) + 2)
-            * getStab(attack) * calculateWeakness(leftAttacker);
+    private String calculateLeftDamage(String attack, boolean leftAttacker) {
+        double fullDamage = (((2 * leftPoke.level / 5 + 2) * getAttack(true) * getPower(attack) / getDefense(true)) / 50) + 2 * getStab(attack, true)
+                * calculateWeakness(leftAttacker) * weatherBoost();
 
-        return fullDamage * .85 + "% - " + fullDamage;
+        return fullDamage * .85 + "% - " + fullDamage + "%";
     }
+
+    private double weatherBoost() {
+        return 1.0;
+    }
+
+    private double getStab(String attack, boolean isLeftAttacker) {
+        String curr = null;
+        if(isLeftAttacker) curr = pokeLeft;
+        else curr = pokeRight;
+        Pokemon mon = Pokemon.getPokemon(database, curr);
+        String type = (String) ((Map<String, Object>) database.child("Attacks").child(attack).getValue()).get("type");
+        if(mon.type1.equals(type) || mon.type2.equals(type)) return 1.5;
+        return 1.0;
+    }
+
+    private double getDefense(boolean isLeftAttacker) {
+        Pokemon mon = null;
+        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
+        else Pokemon.getPokemon(database, pokeRight);
+        return ( ( ( 31 + 2 * mon.baseDEF + (mon.defEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "def");
+        //TODO Calculate exact Defense stat based on formula (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
+
+    }
+
+    private double calcNatureBoost(Pokemon mon, String def) {
+        return 0.0;
+    }
+
+    private double getPower(String attack) {
+
+        return Double.parseDouble((String) ((Map<String, Object>) database.child("Attacks").child(attack).getValue()).get("hp"));
+    }
+
+    private double getAttack(boolean isLeftAttacker) {
+        Pokemon mon = null;
+        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
+        else Pokemon.getPokemon(database, pokeRight);
+        return ( ( ( 31 + 2 * mon.baseATK + (mon.atkEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "atk");
+
+        //TODO (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
+    }
+
+    private double getHP(boolean isLeft) {
+        Pokemon mon = null;
+        if(isLeft) Pokemon.getPokemon(database, pokeLeft);
+        else Pokemon.getPokemon(database, pokeRight);
+        return  ( ( 31 + 2 * mon.baseHP + (mon.hpEV) ) * mon.level / 100.0 ) + 10 + mon.level;
+
+        //TODO  HP = ( (IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 10 + Level
+    }
+
+    private double getSpecialAttack(boolean isLeftAttacker) {
+        Pokemon mon = null;
+        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
+        else Pokemon.getPokemon(database, pokeRight);
+        return ( ( ( 31 + 2 * mon.baseSPA + (mon.spaEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "spa");
+
+        //TODO SPA = (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
+    }
+
+    private double getSpecialDefense(boolean isLeftAttacker) {
+        Pokemon mon = null;
+        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
+        else Pokemon.getPokemon(database, pokeRight);
+        return ( ( ( 31 + 2 * mon.baseSPD + (mon.spdEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "spd");
+
+        //TODO SPD = (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
+    }
+
+    private double getSpeed(boolean isLeftAttacker) {
+        Pokemon mon = null;
+        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
+        else Pokemon.getPokemon(database, pokeRight);
+        return ( ( ( 31 + 2 * mon.baseSPE + (mon.speEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "spe");
+
+        //TODO SPE = (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
+    }
+
 
     private double calculateWeakness(boolean leftAttacker) {
         return 1.0;
@@ -282,7 +352,7 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         leftHP.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                leftHPEV.setText((leftPoke.baseHP = i * 4) + "");
+                leftHPEV.setText((leftPoke.hpEV = i * 4) + "");
             }
 
             @Override
@@ -298,7 +368,7 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         leftATK.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                leftATKEV.setText((leftPoke.baseATK = i * 4) + "");
+                leftATKEV.setText((leftPoke.atkEV = i * 4) + "");
             }
 
             @Override
@@ -314,7 +384,7 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         leftDEF.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                leftDEFEV.setText((leftPoke.baseDEF = i * 4) + "");
+                leftDEFEV.setText((leftPoke.defEV = i * 4) + "");
             }
 
             @Override
@@ -330,7 +400,7 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         leftSPA.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                leftSPAEV.setText((leftPoke.baseSPA = i * 4) + "");
+                leftSPAEV.setText((leftPoke.spaEV = i * 4) + "");
             }
 
             @Override
@@ -346,7 +416,7 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         leftSPD.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                leftSPDEV.setText((leftPoke.baseSPD = i * 4) + "");
+                leftSPDEV.setText((leftPoke.spdEV = i * 4) + "");
             }
 
             @Override
@@ -362,7 +432,7 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         leftSPE.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                leftSPEEV.setText((leftPoke.baseSPE = i * 4) + "");
+                leftSPEEV.setText((leftPoke.speEV = i * 4) + "");
             }
 
             @Override

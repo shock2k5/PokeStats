@@ -296,35 +296,71 @@
                     android:layout_below="@+id/left_spn_natures"
                     android:layout_alignParentStart="true">
                 </Spinner>
+                <TextView
+                    android:text="Move 1 Damage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/spn_left_move_1"
+                    android:paddingTop="15dp"
+                    android:id="@+id/txt_move1_dmg"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center"
+                    android:textSize="16sp" />
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spn_left_move_2"
                     android:paddingTop="15dp"
-                    android:layout_below="@id/spn_left_move_1"
+                    android:layout_below="@id/txt_move1_dmg"
                     android:entries="@array/moves_prompt">
                 </Spinner>
+                <TextView
+                    android:text="Move 2 Damage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/spn_left_move_2"
+                    android:paddingTop="15dp"
+                    android:id="@+id/txt_move2_dmg"
+                    android:textSize="15dp"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center" />
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spn_left_move_3"
                     android:paddingTop="15dp"
-                    android:layout_below="@id/spn_left_move_2"
+                    android:layout_below="@id/txt_move2_dmg"
                     android:entries="@array/moves_prompt">
                 </Spinner>
+                <TextView
+                    android:text="Move 3 Damage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/spn_left_move_3"
+                    android:paddingTop="15dp"
+                    android:id="@+id/txt_move3_dmg"
+                    android:textSize="15dp"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center" />
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spn_left_move_4"
-                    android:layout_below="@id/spn_left_move_3"
                     android:paddingTop="15dp"
-                    android:paddingBottom="10dp"
                     android:entries="@array/moves_prompt"
-                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/txt_move3_dmg"
                     android:layout_alignParentStart="true">
                 </Spinner>
-
-
+                <TextView
+                    android:text="Move 4 Damage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:id="@+id/txt_move4_dmg"
+                    android:textSize="15dp"
+                    android:layout_below="@id/spn_left_move_4"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center" />
             </RelativeLayout>
 
             <!--
@@ -602,47 +638,81 @@
 
 
                 </LinearLayout>
-
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spn_right_move_1"
+                    android:paddingTop="15dp"
+                    android:entries="@array/moves_prompt"
+                    android:layout_below="@id/right_spn_natures"
+                    android:layout_alignParentStart="true">
+                </Spinner>
                 <TextView
                     android:text="Move 1 Damage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/right_spn_natures"
+                    android:layout_below="@id/spn_right_move_1"
                     android:paddingTop="15dp"
-                    android:id="@+id/txt_move1_dmg"
+                    android:id="@+id/txt_move1_right_dmg"
                     android:layout_alignParentStart="true"
                     android:gravity="center"
                     android:textSize="16sp" />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spn_right_move_2"
+                    android:paddingTop="15dp"
+                    android:layout_below="@id/txt_move1_right_dmg"
+                    android:entries="@array/moves_prompt">
+                </Spinner>
                 <TextView
                     android:text="Move 2 Damage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_move1_dmg"
+                    android:layout_below="@id/spn_right_move_2"
                     android:paddingTop="15dp"
-                    android:id="@+id/txt_move2_dmg"
+                    android:id="@+id/txt_move2_right_dmg"
                     android:textSize="15dp"
                     android:layout_alignParentStart="true"
                     android:gravity="center" />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spn_right_move_3"
+                    android:paddingTop="15dp"
+                    android:layout_below="@id/txt_move2_right_dmg"
+                    android:entries="@array/moves_prompt">
+                </Spinner>
                 <TextView
                     android:text="Move 3 Damage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_move2_dmg"
+                    android:layout_below="@id/spn_right_move_3"
                     android:paddingTop="15dp"
-                    android:id="@+id/txt_move3_dmg"
+                    android:id="@+id/txt_move3_right_dmg"
                     android:textSize="15dp"
                     android:layout_alignParentStart="true"
                     android:gravity="center" />
-
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spn_right_move_4"
+                    android:layout_below="@id/txt_move3_right_dmg"
+                    android:paddingTop="15dp"
+                    android:entries="@array/moves_prompt"
+                    android:layout_alignParentStart="true">
+                </Spinner>
                 <TextView
                     android:text="Move 4 Damage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="15dp"
-                    android:id="@+id/txt_move4_dmg"
+                    android:paddingBottom="10dp"
+                    android:id="@id/txt_move4_dmg"
                     android:textSize="15dp"
-                    android:layout_below="@+id/txt_move3_dmg"
+                    android:layout_below="@id/spn_right_move_4"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
                     android:gravity="center" />
 
             </RelativeLayout>
