@@ -31,8 +31,9 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         spnRightMove1, spnRightMove2, spnRightMove3, spnRightMove4,
         spnLeftAbility, spnLeftItem, spnleftNature, spnRightAbility,
         spnRightNature, spnRightItem;
-    public ArrayList<String> pokeNames, moves, leftAbilities, rightAbilities, moves1;
-    public String pokeLeft, pokeRight, lTempName, rTempName;
+    public ArrayList<String> pokeNames, leftMoves, rightMoves, leftAbilities, rightAbilities,
+        leftNature, rightNature;
+    public String pokeLeft, pokeRight, lTempName, rTempName, weather;
     private Firebase fireRef;
     private AutoCompleteTextView txtLeftName, txtRightName;
     private SeekBar leftHP, leftATK, leftDEF, leftSPA, leftSPD, leftSPE,
@@ -56,12 +57,6 @@ public class DamageCalculatorActivity extends AppCompatActivity {
 
         imgLeftPoke = (ImageView) findViewById(R.id.img_left_poke);
         imgRightPoke = (ImageView) findViewById(R.id.img_right_poke);
-
-        spnLeftMove1 = (Spinner) findViewById(R.id.spn_left_move_1);
-        spnLeftMove2 = (Spinner) findViewById(R.id.spn_left_move_2);
-        spnLeftMove3 = (Spinner) findViewById(R.id.spn_left_move_3);
-        spnLeftMove4 = (Spinner) findViewById(R.id.spn_left_move_4);
-        spnLeftAbility = (Spinner) findViewById(R.id.left_spn_abilities);
 
         fireRef = new Firebase("https://pokestatix.firebaseio.com/");
         fireRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -134,88 +129,6 @@ public class DamageCalculatorActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * This method is called when the name input for the Attacking Pokemon is contained in the
-     * Pokedex. This will update the stats, abilities, and moves list for the Attacking mon.
-     */
-    private void updateLeft(String name, DataSnapshot snap) {
-        leftPoke = Pokemon.getPokemon(snap, name);
-        Map<String, Object> currPoke = (Map<String, Object>) snap.child("Pokemon").child(name.toLowerCase()).getValue();
-
-        Picasso.with(this).load((String) currPoke.get("photo")).into(imgLeftPoke);
-
-        moves = new ArrayList<>();
-        if(currPoke.get("eggMoves") != null) moves.addAll(((ArrayList<String>) currPoke.get("eggMoves")));
-        if(currPoke.get("lvMoves") != null)moves.addAll(((ArrayList<String>) currPoke.get("lvMoves")));
-        if(currPoke.get("tutorMoves") != null)moves.addAll(((ArrayList<String>) currPoke.get("tutorMoves")));
-        if(currPoke.get("transferMoves") != null)moves.addAll(((ArrayList<String>) currPoke.get("transferMoves")));
-        if(currPoke.get("tmMoves") != null)moves.addAll(((ArrayList<String>) currPoke.get("tmMoves")));
-
-        Collections.sort(moves);
-        int size = moves.size();
-        for(int i = 0; i < size - 1; i++){
-            if(moves.get(i).compareTo(moves.get(i + 1)) == 0){
-                moves.remove(i--);
-                size--;
-            }
-        }
-
-        spnLeftMove1.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, moves));
-        spnLeftMove1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                txtResult1.setText(calculateLeftDamage(moves.get(position), true));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spnLeftMove2.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, moves));
-        spnLeftMove2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                txtResult2.setText(moves.get(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spnLeftMove3.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, moves));
-        spnLeftMove3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                txtResult3.setText(moves.get(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spnLeftMove4.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, moves));
-        spnLeftMove4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                txtResult4.setText(moves.get(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        leftAbilities = new ArrayList<String>();
-
-        if(currPoke.get("abilities") != null) leftAbilities.addAll((ArrayList<String>) currPoke.get("abilities"));
-        spnLeftAbility.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, leftAbilities));
-
-        //spnLeftAbility.performItemClick(spnLeftAbility, 0, R.id.left_spn_abilities);
-    }
 
     /**
      * This method will calcluate the damage done and output a string of the range of damage that could be done
@@ -236,10 +149,9 @@ public class DamageCalculatorActivity extends AppCompatActivity {
     }
 
     private double getStab(String attack, boolean isLeftAttacker) {
-        String curr = null;
-        if(isLeftAttacker) curr = pokeLeft;
-        else curr = pokeRight;
-        Pokemon mon = Pokemon.getPokemon(database, curr);
+        Pokemon mon = null;
+        if(isLeftAttacker) mon = leftPoke;
+        else mon = rightPoke;
         String type = (String) ((Map<String, Object>) database.child("Attacks").child(attack).getValue()).get("type");
         if(mon.type1.equals(type) || mon.type2.equals(type)) return 1.5;
         return 1.0;
@@ -247,65 +159,151 @@ public class DamageCalculatorActivity extends AppCompatActivity {
 
     private double getDefense(boolean isLeftAttacker) {
         Pokemon mon = null;
-        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
-        else Pokemon.getPokemon(database, pokeRight);
+        if(isLeftAttacker) mon = leftPoke;
+        else mon = rightPoke;
         return ( ( ( 31 + 2 * mon.baseDEF + (mon.defEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "def");
         //TODO Calculate exact Defense stat based on formula (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
 
     }
 
-    private double calcNatureBoost(Pokemon mon, String def) {
-        return 0.0;
+    //TODO Save the nature from the spinner into the nature variable
+    private double calcNatureBoost(Pokemon mon, String category) {
+        if(mon.nature == null) return 1.0;
+        switch(mon.nature) {
+            case "Lonely":
+            case "Naughty":
+            case "Brave":
+            case "Adamant":
+                if (category.equals("atk")) return 1.1;
+                break;
+            case "Bold":
+            case "Impish":
+            case "Lax":
+            case "Relaxed":
+                if (category.equals("def")) return 1.1;
+                break;
+            case "Modest":
+            case "Mild":
+            case "Rash":
+            case "Quiet":
+                if (category.equals("spa")) return 1.1;
+                break;
+            case "Calm":
+            case "Gentle":
+            case "Careful":
+            case "Sassy":
+                if (category.equals("spd")) return 1.1;
+                break;
+            case "Timid":
+            case "Hasty":
+            case "Jolly":
+            case "Naive":
+                if (category.equals("spe")) return 1.1;
+                break;
+        }
+        switch(mon.nature){
+            case "Bold":
+            case "Modest":
+            case "Calm":
+            case "Timid":
+                if (category.equals("atk")) return 0.9;
+                break;
+            case "Lonely":
+            case "Mild":
+            case "Gentle":
+            case "Hasty":
+                if (category.equals("def")) return 0.9;
+                break;
+            case "Adamant":
+            case "Impish":
+            case "Careful":
+            case "Jolly":
+                if (category.equals("spa")) return 0.9;
+                break;
+            case "Naughty":
+            case "Lax":
+            case "Rash":
+            case "Naive":
+                if (category.equals("spd")) return 0.9;
+                break;
+            case "Brave":
+            case "Relaxed":
+            case "Quiet":
+            case "Sassy":
+                if (category.equals("spe")) return 0.9;
+                break;
+
+        }
+        return 1.0;
     }
 
     private double getPower(String attack) {
-
-        return Double.parseDouble((String) ((Map<String, Object>) database.child("Attacks").child(attack).getValue()).get("hp"));
+        try {
+            return Double.parseDouble((String) ((Map<String, Object>) database.child("Attacks").child(attack).getValue()).get("hp"));
+        } catch (NumberFormatException e){
+            return 0.0;
+        }
     }
 
+    /**
+     * ( ( ( IV + 2 * BaseStat + ( EV / 4 ) ) * Level/100 ) + 5 ) * Nature Value
+     * @param isLeftAttacker
+     * @return
+     */
     private double getAttack(boolean isLeftAttacker) {
         Pokemon mon = null;
-        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
-        else Pokemon.getPokemon(database, pokeRight);
+        if(isLeftAttacker) mon = leftPoke;
+        else mon = rightPoke;
         return ( ( ( 31 + 2 * mon.baseATK + (mon.atkEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "atk");
-
-        //TODO (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
     }
 
+    /**
+     * HP = ( (IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 10 + Level
+     * @param isLeft
+     * @return
+     */
     private double getHP(boolean isLeft) {
         Pokemon mon = null;
-        if(isLeft) Pokemon.getPokemon(database, pokeLeft);
-        else Pokemon.getPokemon(database, pokeRight);
+        if(isLeft) mon = leftPoke;
+        else mon = rightPoke;
         return  ( ( 31 + 2 * mon.baseHP + (mon.hpEV) ) * mon.level / 100.0 ) + 10 + mon.level;
-
-        //TODO  HP = ( (IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 10 + Level
     }
 
+    /**
+     * SPA = (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
+     * @param isLeftAttacker
+     * @return
+     */
     private double getSpecialAttack(boolean isLeftAttacker) {
         Pokemon mon = null;
-        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
-        else Pokemon.getPokemon(database, pokeRight);
+        if(isLeftAttacker) mon = leftPoke;
+        else mon = rightPoke;
         return ( ( ( 31 + 2 * mon.baseSPA + (mon.spaEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "spa");
 
-        //TODO SPA = (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
     }
 
+    /**
+     * SPD = ( ( ( IV + 2 * BaseStat + ( EV / 4 ) ) * Level/100 ) + 5) * Nature Value
+     * @param isLeftAttacker
+     * @return
+     */
     private double getSpecialDefense(boolean isLeftAttacker) {
         Pokemon mon = null;
-        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
-        else Pokemon.getPokemon(database, pokeRight);
+        if(isLeftAttacker) mon = leftPoke;
+        else mon = rightPoke;
         return ( ( ( 31 + 2 * mon.baseSPD + (mon.spdEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "spd");
-
-        //TODO SPD = (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
     }
 
+    /**
+     * SPE = ( ( ( IV + 2 * BaseStat + ( EV / 4 ) ) * Level/100 ) + 5) * Nature Value
+     * @param isLeftAttacker
+     * @return
+     */
     private double getSpeed(boolean isLeftAttacker) {
         Pokemon mon = null;
-        if(isLeftAttacker) Pokemon.getPokemon(database, pokeLeft);
-        else Pokemon.getPokemon(database, pokeRight);
+        if(isLeftAttacker) mon = leftPoke;
+        else mon = rightPoke;
         return ( ( ( 31 + 2 * mon.baseSPE + (mon.speEV) ) * mon.level / 100.0 ) + 5) * calcNatureBoost(mon, "spe");
-
-        //TODO SPE = (((IV + 2 * BaseStat + (EV/4) ) * Level/100 ) + 5) * Nature Value
     }
 
 
@@ -314,10 +312,101 @@ public class DamageCalculatorActivity extends AppCompatActivity {
     }
 
     public ArrayList<String> getMoves(){
-        return moves;
+        return leftMoves;
     }
 
+    /**
+     * This method is called when the name input for the Attacking Pokemon is contained in the
+     * Pokedex. This will update the stats, abilities, and moves list for the Attacking mon.
+     */
+    private void updateLeft(String name, DataSnapshot snap) {
+        spnLeftMove1 = (Spinner) findViewById(R.id.spn_left_move_1);
+        spnLeftMove2 = (Spinner) findViewById(R.id.spn_left_move_2);
+        spnLeftMove3 = (Spinner) findViewById(R.id.spn_left_move_3);
+        spnLeftMove4 = (Spinner) findViewById(R.id.spn_left_move_4);
+        spnLeftAbility = (Spinner) findViewById(R.id.left_spn_abilities);
+
+        leftPoke = Pokemon.getPokemon(snap, name);
+        Map<String, Object> currPoke = (Map<String, Object>) snap.child("Pokemon").child(name.toLowerCase()).getValue();
+
+        Picasso.with(this).load((String) currPoke.get("photo")).into(imgLeftPoke);
+
+        leftMoves = new ArrayList<>();
+        if(currPoke.get("eggMoves") != null) leftMoves.addAll(((ArrayList<String>) currPoke.get("eggMoves")));
+        if(currPoke.get("lvMoves") != null) leftMoves.addAll(((ArrayList<String>) currPoke.get("lvMoves")));
+        if(currPoke.get("tutorMoves") != null) leftMoves.addAll(((ArrayList<String>) currPoke.get("tutorMoves")));
+        if(currPoke.get("transferMoves") != null) leftMoves.addAll(((ArrayList<String>) currPoke.get("transferMoves")));
+        if(currPoke.get("tmMoves") != null) leftMoves.addAll(((ArrayList<String>) currPoke.get("tmMoves")));
+
+        Collections.sort(leftMoves);
+        int size = leftMoves.size();
+        for(int i = 0; i < size - 1; i++){
+            if(leftMoves.get(i).compareTo(leftMoves.get(i + 1)) == 0){
+                leftMoves.remove(i--);
+                size--;
+            }
+        }
+
+        spnLeftMove1.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, leftMoves));
+        spnLeftMove1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                txtResult1.setText(calculateLeftDamage(leftMoves.get(position), true));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spnLeftMove2.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, leftMoves));
+        spnLeftMove2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                txtResult2.setText(leftMoves.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spnLeftMove3.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, leftMoves));
+        spnLeftMove3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                txtResult3.setText(leftMoves.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spnLeftMove4.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, leftMoves));
+        spnLeftMove4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                txtResult4.setText(leftMoves.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        leftAbilities = new ArrayList<String>();
+
+        if(currPoke.get("abilities") != null) leftAbilities.addAll((ArrayList<String>) currPoke.get("abilities"));
+        spnLeftAbility.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, leftAbilities));
+
+        //spnLeftAbility.performItemClick(spnLeftAbility, 0, R.id.left_spn_abilities);
+
+    }
+    
     private void updateRight(String name, DataSnapshot snap){
+        //TODO Update the Right half with all the information of the left half
         Map<String, Object> currPoke = (Map<String, Object>) snap.child(name.toLowerCase()).getValue();
 
         Picasso.with(this).load((String) currPoke.get("photo")).into(imgRightPoke);
@@ -559,6 +648,32 @@ public class DamageCalculatorActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+
+        spnleftNature = (Spinner) findViewById(R.id.left_spn_natures);
+        spnleftNature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                leftPoke.nature = getResources().getStringArray(R.array.natures)[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                leftPoke.nature = "";
+            }
+        });
+
+        spnRightNature = (Spinner) findViewById(R.id.right_spn_natures);
+        spnRightNature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                rightPoke.nature = getResources().getStringArray(R.array.natures)[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                rightPoke.nature = "";
             }
         });
     }

@@ -30,31 +30,31 @@
 
     <string-array name="natures">
         <item>Choose Your Nature</item>
-        <item>Hardy</item>
-        <item>Lonely</item>
         <item>Adamant</item>
-        <item>Naughty</item>
-        <item>Brave</item>
-        <item>Bold</item>
-        <item>Docile</item>
-        <item>Impish</item>
-        <item>Lax</item>
-        <item>Relaxed</item>
-        <item>Modest</item>
-        <item>Mild</item>
         <item>Bashful</item>
-        <item>Rash</item>
-        <item>Quiet</item>
+        <item>Bold</item>
+        <item>Brave</item>
         <item>Calm</item>
-        <item>Gentle</item>
         <item>Careful</item>
-        <item>Quirky</item>
-        <item>Sassy</item>
-        <item>Timid</item>
+        <item>Docile</item>
+        <item>Gentle</item>
+        <item>Hardy</item>
         <item>Hasty</item>
+        <item>Impish</item>
         <item>Jolly</item>
+        <item>Lax</item>
+        <item>Lonely</item>
+        <item>Mild</item>
+        <item>Modest</item>
         <item>Naive</item>
+        <item>Naughty</item>
+        <item>Quiet</item>
+        <item>Quirky</item>
+        <item>Rash</item>
+        <item>Relaxed</item>
+        <item>Sassy</item>
         <item>Serious</item>
+        <item>Timid</item>
     </string-array>
 
 </resources>

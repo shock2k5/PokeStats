@@ -17,7 +17,7 @@ public class Pokemon {
     public long baseATK, baseDEF, baseSPA, baseSPD, baseSPE, baseHP, dexNumber, eggSteps, level,
         hpEV, atkEV, defEV, spaEV, spdEV, speEV;
     public double weight, femalePercentage, malePercentage;
-    public String eggGroup1, eggGroup2, height, name, photoURL, type1, type2;
+    public String eggGroup1, eggGroup2, height, name, photoURL, type1, type2, nature;
     public ArrayList<String> eggMoves, lvMoves, tmMoves, transferMoves, tutorMoves, abilities;
     public static ArrayList<String> names = null;
 
