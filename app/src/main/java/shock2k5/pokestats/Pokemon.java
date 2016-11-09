@@ -22,6 +22,7 @@ public class Pokemon {
     public static ArrayList<String> names = null;
 
 
+
     public static ArrayList<String> getNames(DataSnapshot snapshot){
         if(names != null) return names;
         ArrayList<String> names = new ArrayList<String>();

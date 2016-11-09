@@ -125,8 +125,6 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         });
 
         setBars();
-
-
     }
 
 
@@ -138,13 +136,37 @@ public class DamageCalculatorActivity extends AppCompatActivity {
      * @return
      */
     private String calculateLeftDamage(String attack, boolean leftAttacker) {
-        double fullDamage = (((2 * leftPoke.level / 5 + 2) * getAttack(true) * getPower(attack) / getDefense(true)) / 50) + 2 * getStab(attack, true)
-                * calculateWeakness(leftAttacker) * weatherBoost();
+        Double fullDamage = (((2 * leftPoke.level / 5 + 2) * getAttack(true) * getPower(attack) / getDefense(true)) / 50) + 2 * getStab(attack, true)
+                * calculateWeakness(leftAttacker) * weatherBoost(attack, true);
 
-        return fullDamage * .85 + "% - " + fullDamage + "%";
+        return (String.format("%.2f", (new Double(fullDamage * .85)).toString()))
+                + "% - " + (String.format("%.2f", fullDamage)) + "%";
     }
 
-    private double weatherBoost() {
+    private double weatherBoost(String attack, boolean leftAttacker) {
+        String attackType = (String) database.child("Attacks").child(attack).child("type").getValue();
+        if(attackType.equals("fire") && (weather.equals("Sun") || weather.equals("Harsh Sun"))
+                || attackType.equals("water") && (weather.equals("Rain") || weather.equals("Heavy Rain"))
+                || attackType.equals("ice") && weather.equals("Hail")
+                || attackType.equals("ground") && weather.equals("Sandstorm") ){
+            return 1.5;
+        }
+        if(attackType.equals("water") && weather.equals("Harsh Sun")
+                || attackType.equals("fire") && weather.equals("Heavy Rain")){
+            return 0.0;
+        }
+        if(attackType.equals("water") && weather.equals("Sun")
+                || attackType.equals("fire") && weather.equals("Rain")){
+            return 0.5;
+        }
+        String side = (String) database.child("Attacks").child(attack).child("physical").getValue();
+        if(side.equals("physical")) return 1.0;
+        Pokemon mon = null;
+        if(rightPoke.type1 == null || leftPoke.type1 == null) return 1.0;
+        if((leftAttacker && (rightPoke.type1.equals("Rock") || rightPoke.type2 != null && rightPoke.type2.equals("Rock")))
+                || (!leftAttacker && (leftPoke.type1.equals("Rock") || leftPoke.type2 != null && leftPoke.type2.equals("Rock")))){
+            return 0.66;
+        }
         return 1.0;
     }
 
@@ -166,7 +188,6 @@ public class DamageCalculatorActivity extends AppCompatActivity {
 
     }
 
-    //TODO Save the nature from the spinner into the nature variable
     private double calcNatureBoost(Pokemon mon, String category) {
         if(mon.nature == null) return 1.0;
         switch(mon.nature) {
@@ -308,6 +329,11 @@ public class DamageCalculatorActivity extends AppCompatActivity {
 
 
     private double calculateWeakness(boolean leftAttacker) {
+        Pokemon mon = null;
+        if(leftAttacker) mon = leftPoke;
+        else mon = rightPoke;
+        //TODO
+
         return 1.0;
     }
 
@@ -404,7 +430,7 @@ public class DamageCalculatorActivity extends AppCompatActivity {
         //spnLeftAbility.performItemClick(spnLeftAbility, 0, R.id.left_spn_abilities);
 
     }
-    
+
     private void updateRight(String name, DataSnapshot snap){
         //TODO Update the Right half with all the information of the left half
         Map<String, Object> currPoke = (Map<String, Object>) snap.child(name.toLowerCase()).getValue();
